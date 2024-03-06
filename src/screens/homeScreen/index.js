@@ -1,14 +1,15 @@
+import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default function SettingsScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text>Settings</Text>
+            <Text>Open up App.js to start working on your app!</Text>
             <Button
-                title="Go to Home"
+                title="Go to Settings"
                 onPress={() =>
-                    navigation.navigate('Home')
+                    navigation.navigate('Settings')
                 }
             />
             <StatusBar style="auto" />
