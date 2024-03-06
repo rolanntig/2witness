@@ -17,7 +17,13 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} options={{
+          headerStyle: {
+            backgroundColor: '#404654',
+            borderBottomColor: '#404654',
+            color: '#ffffff',
+          },
+        }} />
         <Stack.Screen name="Info" component={InfoScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Upload" component={UploadScreen} />
