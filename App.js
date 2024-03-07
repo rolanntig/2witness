@@ -70,6 +70,7 @@ function MyTabs() {
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="setting" color={color} size={size} />
           ),
+          headerShown: false
         }}
       />
     </Tab.Navigator>
