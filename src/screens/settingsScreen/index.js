@@ -73,7 +73,7 @@ export default function SettingsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
+        height: '100vh',
         flex: 1,
         display: 'flex',
         backgroundColor: '#404654',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '85%',
+        width: '85vw',
         backgroundColor: "#a4abbd",
         borderRadius: 10,
     },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         alignItems: 'center',
-        width: '90%',
+        width: '90vw',
         height: "25vh",
     },
     settingStyling: {
