@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
 import { View, TouchableOpacity, Text, Alert } from "react-native";
-import { Camera } from "expo-camera";
-import * as FileSystem from "expo-file-system";
-import * as ImagePicker from "expo-image-picker";
-import * as MediaLibrary from "expo-media-library";
 import {
 	MaterialCommunityIcons,
 	AntDesign,
 	MaterialIcons,
 } from "@expo/vector-icons";
+import React, { useState, useEffect, useRef } from "react";
 import { Audio } from "expo-av";
+import { Camera } from "expo-camera";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 function CameraScreen() {
 	const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -18,6 +19,8 @@ function CameraScreen() {
 	const cameraRef = useRef(null);
 	const [isRecording, setIsRecording] = useState(false);
 	const recordingRef = useRef(new Audio.Recording());
+	const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+	const [zoom, setZoom] = useState(0);
 
 	useEffect(() => {
 		(async () => {
@@ -57,21 +60,29 @@ function CameraScreen() {
 		}
 	};
 
+	const toggleFlash = () => {
+		setFlashMode(
+			flashMode === Camera.Constants.FlashMode.off
+				? Camera.Constants.FlashMode.on
+				: Camera.Constants.FlashMode.off,
+		);
+	};
+
 	const takePicture = async () => {
 		if (cameraRef.current) {
-			const photo = await cameraRef.current.takePictureAsync();
+			const photo = await cameraRef.current.takePictureAsync({ quality: 1 });
+			const compressedPhoto = await compressImage(photo.uri, SaveFormat.JPEG);
 			await saveMedia(photo);
 		}
 	};
 
 	const startRecording = async () => {
 		if (cameraRef.current) {
-			try {
-				const video = await cameraRef.current.recordAsync();
-				await saveMedia(video);
-			} catch (e) {
-				console.error(e);
-			}
+			const video = await cameraRef.current.recordAsync({
+				quality: Camera.Constants.VideoQuality["1080p"],
+				videoBitrate: 10 * 1000 * 1000,
+			});
+			await saveMedia(video);
 		}
 	};
 
@@ -79,6 +90,18 @@ function CameraScreen() {
 		if (cameraRef.current) {
 			cameraRef.current.stopRecording();
 		}
+	};
+
+	const compressImage = async (uri, format = SaveFormat.JPEG) => {
+		const result = await manipulateAsync(uri, [{ resize: { width: 1200 } }], {
+			compress: 0.7,
+			format,
+		});
+		return {
+			name: `${Date.now()}.${format}`,
+			type: `image/${format}`,
+			...result,
+		};
 	};
 
 	const recordAudio = async () => {
@@ -136,38 +159,37 @@ function CameraScreen() {
 	const uploadMedia = async () => {
 		// Låt användaren välja en bild
 		const result = await ImagePicker.launchImageLibraryAsync({
-		  mediaTypes: ImagePicker.MediaTypeOptions.All,
-		  allowsEditing: true,
-		  aspect: [4, 3],
-		  quality: 1,
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
 		});
-	  
+
 		if (!result.cancelled) {
-		  // Använd FileSystem.uploadAsync för att ladda upp bilden
-		  const localUri = result.uri;
-		  const filename = localUri.split('/').pop();
-		  const match = /\.(\w+)$/.exec(filename);
-		  const type = match ? `image/${match[1]}` : "image";
-	  
-		  // Ange URL till din uppladdningsserver och inkludera mappen 'media'
-		  const url = '../homeScreen/media';
-	  
-		  const formData = new FormData();
-		  formData.append('photo', { uri: localUri, name: filename, type });
-	  
-		  const options = {
-			method: 'POST',
-			body: formData,
-			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'multipart/form-data',
-			},
-		  };
-	  
-		  return await FileSystem.uploadAsync(url, localUri, options);
+			// Använd FileSystem.uploadAsync för att ladda upp bilden
+			const localUri = result.uri;
+			const filename = localUri.split("/").pop();
+			const match = /\.(\w+)$/.exec(filename);
+			const type = match ? `image/${match[1]}` : "image";
+
+			// Ange URL till din uppladdningsserver och inkludera mappen 'media'
+			const url = "../homeScreen/media";
+
+			const formData = new FormData();
+			formData.append("photo", { uri: localUri, name: filename, type });
+
+			const options = {
+				method: "POST",
+				body: formData,
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "multipart/form-data",
+				},
+			};
+
+			return await FileSystem.uploadAsync(url, localUri, options);
 		}
-	  };
-	  
+	};
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -214,11 +236,7 @@ function CameraScreen() {
 					<TouchableOpacity
 						onPress={isRecording ? stopRecordingAudio : recordAudio}
 					>
-						<MaterialIcons
-							name={isRecording ? "mic-off" : "mic"}
-							size={32}
-							color="white"
-						/>
+						<MaterialIcons name="record-voice-over" size={32} color="white" />
 					</TouchableOpacity>
 				</View>
 			</Camera>

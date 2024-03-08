@@ -38,7 +38,7 @@ export default function App() {
             }}
             title="Min position"
             description="Här är jag just nu.">
-            <Entypo name="location-pin" size={24} color="black" />
+            <Entypo name="location-pin" size={42} color="black" />
           </Marker>
         </MapView>
       ) : null}
