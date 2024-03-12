@@ -12,7 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
-function CameraScreen() {
+function CameraScreen({ navigation }) {
 	const [hasCameraPermission, setHasCameraPermission] = useState(null);
 	const [hasAudioPermission, setHasAudioPermission] = useState(null);
 	const [type, setType] = useState(Camera.Constants.Type.back);
@@ -26,11 +26,21 @@ function CameraScreen() {
 		(async () => {
 			const cameraStatus = await Camera.requestCameraPermissionsAsync();
 			setHasCameraPermission(cameraStatus.status === "granted");
-
 			const audioStatus = await Camera.requestMicrophonePermissionsAsync();
 			setHasAudioPermission(audioStatus.status === "granted");
 		})();
 	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+		  // Återställ zoom och blixtinställningar eller andra tillstånd här om det behövs
+		  setZoom(0);
+		  setFlashMode(Camera.Constants.FlashMode.off);
+		  // Lägg till ytterligare logik för att återinitiera kameran om det behövs
+		});
+	
+		return unsubscribe;
+	  }, [navigation]);
 
 	if (hasCameraPermission === null || hasAudioPermission === null) {
 		return <View />;
