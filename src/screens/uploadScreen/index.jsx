@@ -4,7 +4,7 @@ import { StyleSheet, View, Button, Text } from 'react-native';
 
 export default function UploadScreen({ navigation }) {
     return (
-        <View style={styles.container}>
+        <View>
             <Text>Upload</Text>
             <Button
                 title="Go to Home"
@@ -16,12 +16,3 @@ export default function UploadScreen({ navigation }) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
