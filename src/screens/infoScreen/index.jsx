@@ -44,7 +44,7 @@ const InfoScreen = () => {
 			});
 
 			// Om användaren valde en fil
-			if (!result.cancelled) {
+			if (result.cancelled) {
 				// Implementera logik för att ladda upp bilden eller videon till en server eller lagring
 				Alert.alert("Success", "Bilden eller videon har laddats upp!");
 			} else {
@@ -81,7 +81,7 @@ const InfoScreen = () => {
 			<ScrollView className="w-full">
 				<ScrollView
 					className={`bg-white border rounded-lg shadow-md w-max mb-6 ${
-						wantedInfo.length > 20 ? "overflow-y-scroll" : ""
+						wantedInfo.length > 10 ? "overflow-y-scroll" : ""
 					}`}
 				>
 					{wantedInfo.map((item) => (
