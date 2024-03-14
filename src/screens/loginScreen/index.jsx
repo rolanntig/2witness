@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'postgres://postgres.dilhnddpgnwywgmrlhey:15wrqIEJ8RaSkYWt@aws-0-eu-central-1.pooler.supabase.com:5432/postgres';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhuZGRwZ253eXdnbXJsaGV5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwOTgxMDEzNCwiZXhwIjoyMDI1Mzg2MTM0fQ.qYfzTxxOK4jSZfUwSRRz9StHXNqoKsxYRw1eT6oqqPc';
+const supabaseUrl = 'postgres://postgres.dilhnddpgnwywgmrlhey:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnaW96Z3V6ZnV3Y2htcGdpdnhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTAzMjA0NjIsImV4cCI6MjAyNTg5NjQ2Mn0._9_KOdLMK9I_XTFf1B3DphacS3UMxF-eM-4b6sTwY1M';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function App() {
