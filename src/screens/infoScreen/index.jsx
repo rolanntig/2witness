@@ -62,92 +62,98 @@ const InfoScreen = () => {
 	};
 
 	return (
-		// Huvudcontainer för komponenten
-		<View className="flex-1 bg-white items-center p-4">
-			<Text className="text-3xl font-bold mb-6">Information</Text>
-			<View className="flex flex-row space-x-2 justify-between w-full">
-				<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
-					<Text className="text-gray-700">Vid akuta händelser ring:</Text>
-					<Text className="text-3xl font-bold text-center">112</Text>
+		<ScrollView className="flex-1 bg-white">
+			<View className="items-center p-4">
+				<Text className="text-3xl font-bold mb-6">Information</Text>
+				<View className="flex flex-row space-x-2 justify-between w-full">
+					<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
+						<Text className="text-gray-700">Vid akuta händelser ring:</Text>
+						<Text className="text-3xl font-bold text-center">112</Text>
+					</View>
+
+					<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
+						<Text className="text-gray-700">Vid andra ärenden ring:</Text>
+						<Text className="text-3xl font-bold text-center">114 14</Text>
+					</View>
+				</View>
+				<View className="border-t-4 w-full border-yellow-500">
+					<Text className="text-2xl my-2 font-bold">Eftersökt Information</Text>
 				</View>
 
-				<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
-					<Text className="text-gray-700">Vid andra ärenden ring:</Text>
-					<Text className="text-3xl font-bold text-center">114 14</Text>
+				<View className="w-full h-80">
+					<ScrollView
+						className={`bg-white border rounded-lg shadow-md w-max mb-6 ${
+							wantedInfo.length > 10 ? "overflow-y-scroll" : ""
+						}`}
+					>
+						{wantedInfo.map((item) => (
+							<View
+								key={item.id}
+								className="flex border-b flex-row p-2 justify-between"
+							>
+								<Text className="flex-1 tracking-wide">{item.title}</Text>
+								<TouchableOpacity onPress={uploadMedia}>
+									<AntDesign name="clouduploado" size={32} color="black" />
+								</TouchableOpacity>
+							</View>
+						))}
+					</ScrollView>
 				</View>
-			</View>
-			<View className="border-t-4  w-full border-yellow-500">
-				<Text className="text-2xl my-2 font-bold">Eftersökt Information</Text>
-			</View>
-			<View className="w-full h-1/2">
-				<ScrollView
-					className={`bg-white border rounded-lg shadow-md w-max mb-6 ${
-						wantedInfo.length > 10 ? "overflow-y-scroll" : ""
-					}`}
-				>
-					{wantedInfo.map((item) => (
-						<View
-							key={item.id}
-							className="flex border-b flex-row p-2 justify-between"
-						>
-							<Text className="flex-1 tracking-wide">{item.title}</Text>
-							<TouchableOpacity onPress={uploadMedia}>
-								<AntDesign name="clouduploado" size={32} color="black" />
+				<StatusBar style="auto" />
+				<View className="w-full mb-6">
+					<View className="border-t-4 mt-2 w-full  border-yellow-500">
+						<Text className="text-2xl my-2 font-bold">FAQ</Text>
+					</View>
+					<View className="bg-white w-full border rounded-lg shadow-md mb-6">
+						<View className="flex border-b flex-row p-2 justify-between">
+							<Text className="flex-1 tracking-wide">
+								Vad händer med materialet?
+							</Text>
+							<TouchableOpacity onPress="">
+								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
-					))}
-				</ScrollView>
-
-				<StatusBar style="auto" />
-			</View>
-
-			<View className="border-t-4 mt-2 w-full  border-yellow-500">
-				<Text className="text-2xl my-2 font-bold">FAQ</Text>
-			</View>
-			<View className="bg-white w-full border h-screen rounded-lg shadow-md mb-6">
-				<View className="flex border-b flex-row p-2 justify-between">
-					<Text className="flex-1 tracking-wide">
-						Vad händer med materialet?
-					</Text>
-					<TouchableOpacity onPress="">
-						<AntDesign name="pluscircleo" size={24} color="black" />
-					</TouchableOpacity>
-				</View>
-				<View className="flex border-b flex-row p-2 justify-between">
-					<Text className="flex-1 tracking-wide">
-						Hur vet jag att jag är anonym?
-					</Text>
-					<TouchableOpacity onPress="">
-						<AntDesign name="pluscircleo" size={24} color="black" />
-					</TouchableOpacity>
-				</View>
-				<View className="flex border-b flex-row p-2 justify-between">
-					<Text className="flex-1 tracking-wide">
-						Vad sparas när jag tar en bild?
-					</Text>
-					<TouchableOpacity onPress="">
-						<AntDesign name="pluscircleo" size={24} color="black" />
-					</TouchableOpacity>
-				</View>
-				<View className="flex border-b flex-row p-2 justify-between">
-					<Text className="flex-1 tracking-wide">Vad innebär kryptering?</Text>
-					<TouchableOpacity onPress="">
-						<AntDesign name="pluscircleo" size={24} color="black" />
-					</TouchableOpacity>
-				</View>
-				<View className="flex border-b flex-row p-2 justify-between">
-					<Text className="flex-1 tracking-wide">Vad är syftet med appen?</Text>
-					<TouchableOpacity onPress="">
-						<AntDesign name="pluscircleo" size={24} color="black" />
-					</TouchableOpacity>
-				</View>
-				<View className="flex flex-row p-2 justify-between">
-					<Text className="flex-1 text-center tracking-wide">
-						Läs mer på: 2witness.se
-					</Text>
+						<View className="flex border-b flex-row p-2 justify-between">
+							<Text className="flex-1 tracking-wide">
+								Hur vet jag att jag är anonym?
+							</Text>
+							<TouchableOpacity onPress="">
+								<AntDesign name="pluscircleo" size={24} color="black" />
+							</TouchableOpacity>
+						</View>
+						<View className="flex border-b flex-row p-2 justify-between">
+							<Text className="flex-1 tracking-wide">
+								Vad sparas när jag tar en bild?
+							</Text>
+							<TouchableOpacity onPress="">
+								<AntDesign name="pluscircleo" size={24} color="black" />
+							</TouchableOpacity>
+						</View>
+						<View className="flex border-b flex-row p-2 justify-between">
+							<Text className="flex-1 tracking-wide">
+								Vad innebär kryptering?
+							</Text>
+							<TouchableOpacity onPress="">
+								<AntDesign name="pluscircleo" size={24} color="black" />
+							</TouchableOpacity>
+						</View>
+						<View className="flex border-b flex-row p-2 justify-between">
+							<Text className="flex-1 tracking-wide">
+								Vad är syftet med appen?
+							</Text>
+							<TouchableOpacity onPress="">
+								<AntDesign name="pluscircleo" size={24} color="black" />
+							</TouchableOpacity>
+						</View>
+						<View className="flex flex-row p-2 justify-between">
+							<Text className="flex-1 text-center tracking-wide">
+								Läs mer på: 2witness.se
+							</Text>
+						</View>
+					</View>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
