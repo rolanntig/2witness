@@ -7,6 +7,7 @@ import MapScreen from "./src/screens/mapScreen";
 import SettingsScreen from "./src/screens/settingsScreen";
 import InfoScreen from "./src/screens/infoScreen";
 import ProfileScreen from "./src/screens/profileScreen";
+import LoginScreen from "./src/screens/loginScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,6 +29,20 @@ function MyTabs() {
 					),
 				}}
 			/>
+
+			<Tab.Screen
+				name="Login"
+				component={LoginScreen}
+				options={{
+					tabBarLabel: "Login",
+					tabBarIcon: ({ color, size }) => (
+						<AntDesign name="login" color={color} size={size} />
+					),
+				}}
+			/>
+
+			
+
 			<Tab.Screen
 				name="Profile"
 				component={ProfileScreen}
