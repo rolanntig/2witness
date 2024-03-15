@@ -65,7 +65,6 @@ const InfoScreen = () => {
 		// Huvudcontainer för komponenten
 		<View className="flex-1 bg-white items-center p-4">
 			<Text className="text-3xl font-bold mb-6">Information</Text>
-
 			<View className="flex flex-row space-x-2 justify-between w-full">
 				<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
 					<Text className="text-gray-700">Vid akuta händelser ring:</Text>
@@ -77,8 +76,10 @@ const InfoScreen = () => {
 					<Text className="text-3xl font-bold text-center">114 14</Text>
 				</View>
 			</View>
-				<Text className="text-2xl font-bold">Eftersökt Information</Text>
-			<ScrollView className="w-full">
+			<View className="border-t-4  w-full border-yellow-500">
+				<Text className="text-2xl my-2 font-bold">Eftersökt Information</Text>
+			</View>
+			<View className="w-full h-1/2">
 				<ScrollView
 					className={`bg-white border rounded-lg shadow-md w-max mb-6 ${
 						wantedInfo.length > 10 ? "overflow-y-scroll" : ""
@@ -98,7 +99,54 @@ const InfoScreen = () => {
 				</ScrollView>
 
 				<StatusBar style="auto" />
-			</ScrollView>
+			</View>
+
+			<View className="border-t-4 mt-2 w-full  border-yellow-500">
+				<Text className="text-2xl my-2 font-bold">FAQ</Text>
+			</View>
+			<View className="bg-white w-full border h-screen rounded-lg shadow-md mb-6">
+				<View className="flex border-b flex-row p-2 justify-between">
+					<Text className="flex-1 tracking-wide">
+						Vad händer med materialet?
+					</Text>
+					<TouchableOpacity onPress="">
+						<AntDesign name="pluscircleo" size={24} color="black" />
+					</TouchableOpacity>
+				</View>
+				<View className="flex border-b flex-row p-2 justify-between">
+					<Text className="flex-1 tracking-wide">
+						Hur vet jag att jag är anonym?
+					</Text>
+					<TouchableOpacity onPress="">
+						<AntDesign name="pluscircleo" size={24} color="black" />
+					</TouchableOpacity>
+				</View>
+				<View className="flex border-b flex-row p-2 justify-between">
+					<Text className="flex-1 tracking-wide">
+						Vad sparas när jag tar en bild?
+					</Text>
+					<TouchableOpacity onPress="">
+						<AntDesign name="pluscircleo" size={24} color="black" />
+					</TouchableOpacity>
+				</View>
+				<View className="flex border-b flex-row p-2 justify-between">
+					<Text className="flex-1 tracking-wide">Vad innebär kryptering?</Text>
+					<TouchableOpacity onPress="">
+						<AntDesign name="pluscircleo" size={24} color="black" />
+					</TouchableOpacity>
+				</View>
+				<View className="flex border-b flex-row p-2 justify-between">
+					<Text className="flex-1 tracking-wide">Vad är syftet med appen?</Text>
+					<TouchableOpacity onPress="">
+						<AntDesign name="pluscircleo" size={24} color="black" />
+					</TouchableOpacity>
+				</View>
+				<View className="flex flex-row p-2 justify-between">
+					<Text className="flex-1 text-center tracking-wide">
+						Läs mer på: 2witness.se
+					</Text>
+				</View>
+			</View>
 		</View>
 	);
 };
