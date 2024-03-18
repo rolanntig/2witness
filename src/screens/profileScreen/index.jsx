@@ -1,77 +1,69 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-	StyleSheet,
-	View,
-	Button,
-	Text,
-	ScrollView,
-	FlatList,
-} from "react-native";
-
-//Todo Add FlatList to the images
-//Todo Add CheckBox to the images
-//Todo Add ChatPage
-//Todo Add IdCardPage
+import { View, Text, ScrollView, Image, TextInput } from "react-native";
 
 export default function ProfileScreen({ navigation }) {
 	return (
-		//* Main Container
-		<View style={styles.container}>
+		<View className="flex-1 bg-[#F6F5F5]">
 			<ScrollView>
-				{/* Top Button Container */}
-				<View style={styles.topButtonContainer}>
-					{/* Id Card Button */}
-					<View style={styles.idCard}>
-						<Button
-							title="Anonymt Kort"
-							onPress={() => navigation.navigate("Home")}
+				<View className="border mt-5 mr-5 ml-5 mb-10 h-36  flex-row justify-evenly items-center">
+					<View>
+						<Image
+							width={120}
+							height={120}
+							source={{ uri: "https://www.w3schools.com/w3images/avatar2.png" }}
+							className="rounded-full"
 						/>
 					</View>
-
-					{/* Chat Button */}
-					<View style={styles.chatButton}>
-						<Button title="Chat" onPress={() => navigation.navigate("Home")} />
+					<View>
+						<Text className="text-lg">Florri Gonzonos</Text>
 					</View>
 				</View>
+				<View className="gap-y-10 h-auto">
 
-				{/* Top Text */}
-				<View style={styles.topText}>
-					<Text style={styles.topTextLook}>
-						Du är alltid anonym när du använder 2witness, alla chatter är
-						krypterade. Samarbete med polis och rättväsende kan hjälpa
-						inrapporterande brott
-					</Text>
-				</View>
-				<View style={styles.imgContainer}>
-					<View style={styles.imgContainerCheckButton}>
-						<Text>CheckBox</Text>
-						<Text style={styles.checkBoxText}>
-							Vill du bli anonymt kontaktad angående detta material
-						</Text>
-					</View>
-					<FlatList>
-						<View style={styles.insideImgContainer}>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
-							<Text>Image Container</Text>
+					<View className="border bg-[#353e4c] rounded-md m-3">
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">Namn</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white">Florri</TextInput>
+							</View>
 						</View>
-					</FlatList>
-				</View>
-				<View style={styles.timeReminderContainer}>
-					<Text> Raderingen sker automatisk inom </Text>
-					<Text> 9d:23h:32min</Text>
-				</View>
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">Efternamn</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white">Gonzonos</TextInput>
+							</View>
+						</View>
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">E-postadress</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white ">
+									Florri.Gonzonos@fakemail.com
+								</TextInput>
+							</View>
+						</View>
+					</View>
 
-				<View style={styles.deleteHistoryButton}>
-					<Button
-						title="Radera Historik"
-						onPress={() => navigation.navigate("Home")}
-					/>
+					<View className="border bg-[#353e4c]  rounded-md m-3">
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">Mobilnummer</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white">+46 01859182</TextInput>
+							</View>
+						</View>
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">Hemnummer</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white">+46 01859182</TextInput>
+							</View>
+						</View>
+						<View className="m-5">
+							<Text className="text-s text-white font-medium">Arbetsnummer</Text>
+							<View className="border-b-2 pt-2 ">
+								<TextInput className="text-xl pb-1 text-white">+46 01859182</TextInput>
+							</View>
+						</View>
+					</View>
 				</View>
 				<StatusBar style="auto" />
 			</ScrollView>
@@ -79,90 +71,5 @@ export default function ProfileScreen({ navigation }) {
 	);
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-	},
-	topButtonContainer: {
-		margin: 10,
-		flexDirection: "row",
-		justifyContent: "space-around",
-	},
-	idCard: {
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 70,
-		width: 150,
-		justifyContent: "center",
-	},
-	chatButton: {
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 70,
-		width: 150,
-		justifyContent: "center",
-	},
-	insideImgContainer: {
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 200,
-		width: 410,
-	},
-	imgContainer: {
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 500,
-		marginTop: 20,
-		marginBottom: 10,
-		marginRight: 10,
-		marginLeft: 10,
-	},
-	deleteHistoryButton: {
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 70,
-		justifyContent: "center",
-		marginRight: 10,
-		marginLeft: 10,
-	},
-	topText: {
-		marginTop: 20,
-		marginBottom: 20,
-		marginRight: 10,
-		marginLeft: 10,
-		borderWidth: 1,
-		borderColor: "thistle",
-		width: 410,
-		height: 90,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	topTextLook: {
-		fontSize: 15,
-		fontWeight: "bold",
-	},
-	imgContainerCheckButton: {
-		borderBottomWidth: 1,
-		borderColor: "thistle",
-		height: 70,
-		justifyContent: "space-evenly",
-		alignItems: "center",
-		flexDirection: "row",
-	},
-	checkBoxText: {
-		fontSize: 12,
-		fontWeight: "bold",
-	},
-	timeReminderContainer: {
-		marginTop: 10,
-		marginRight: 10,
-		marginLeft: 10,
-		borderWidth: 1,
-		borderColor: "thistle",
-		height: 50,
-		justifyContent: "center",
-		alignItems: "center",
-		flexDirection: "row",
-	},
-});
+//Todo Add ChatPage
+//Todo Add IdCardPage
