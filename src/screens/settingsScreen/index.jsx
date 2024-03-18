@@ -2,8 +2,10 @@ import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, Switch, Image, Pressable } from "react-native";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen({ navigation }) {
+	// The images for the icons
 	const iconImages = [
 		"https://i.pinimg.com/736x/e6/e9/3f/e6e93f7bd4f95000d9f56a3c096047d0.jpg",
 		"https://i.pinimg.com/736x/e6/e9/3f/e6e93f7bd4f95000d9f56a3c096047d0.jpg",
@@ -18,17 +20,65 @@ export default function SettingsScreen({ navigation }) {
 	const [setting4, setSetting4] = useState(false);
 	const [setting5, setSetting5] = useState(false);
 	const [setting6, setSetting6] = useState(false);
-	const [selectedIcon, setSelectedIcon] = useState(1);
+	const [selectedIcon, setSelectedIcon] = useState("");
 
-	const changeSelectIcon = (value) => {
-		// Change the icon
-		setSelectedIcon(value);
-	};
+	const storageKey = "@storage_Key";
+	React.useEffect(() => {
+		// Get the stored value
+		const getData = async () => {
+			try {
+				const value = await AsyncStorage.getItem(storageKey);
+				if (value !== null) {
+					// Gets the stored values and sets them as the current values
+					const parsedValue = JSON.parse(value);
+					setSelectedIcon(Number.parseInt(parsedValue.selectedIcon));
+					setNotifications(parsedValue.notifications);
+					setSetting2(parsedValue.setting2);
+					setSetting3(parsedValue.setting3);
+					setSetting4(parsedValue.setting4);
+					setSetting5(parsedValue.setting5);
+					setSetting6(parsedValue.setting6);
+				} else {
+					setSelectedIcon(0);
+				}
+			} catch (e) {
+				// error reading value
+				return null;
+			}
+		};
+		if(getData() === null) {
+			console.error("Error getting data");
+		};
+	}, []);
+
+	React.useEffect(() => {
+		// Update the stored values when they change
+		const jsonData = JSON.stringify({
+			selectedIcon: selectedIcon,
+			notifications: notifications,
+			setting2: setting2,
+			setting3: setting3,
+			setting4: setting4,
+			setting5: setting5,
+			setting6: setting6,
+		});
+		const storeData = async (value) => {
+			try {
+				await AsyncStorage.setItem(storageKey, value);
+			} catch (e) {
+				// saving error
+				return null;
+			}
+		};
+		if(storeData(jsonData) === null) {
+			console.error("Error storing data");
+		};
+	}, [selectedIcon, notifications, setting2, setting3, setting4, setting5, setting6]);
 
 	/* Tailwind works for phone but not web... */
 	return (
-		<View className="h-screen flex items-center justify-around bg-gray-700">
-			<View className="w-11/12 bg-gray-400 rounded-lg px-5">
+		<View className="h-full flex items-center justify-around bg-gray-700">
+			<View className="w-11/12 bg-gray-400 rounded-lg px-5 mt-8">
 				<View className="w-full flex-row justify-between items-center">
 					<Text className="">Notifikationer</Text>
 					<Switch
@@ -51,7 +101,7 @@ export default function SettingsScreen({ navigation }) {
 					/>
 				</View>
 			</View>
-			<View className="w-11/12 bg-gray-400 rounded-lg h-1/10 px-5">
+			<View className="w-11/12 bg-gray-400 rounded-lg px-5">
 				<View className="w-full flex-row justify-between items-center ">
 					<Text className="">Inställing</Text>
 					<Switch
@@ -67,7 +117,7 @@ export default function SettingsScreen({ navigation }) {
 					/>
 				</View>
 			</View>
-			<View className="w-11/12 bg-gray-400 rounded-lg mb-14 h-2/5 px-5">
+			<View className="w-11/12 bg-gray-400 rounded-lg mb-6 px-5">
 				<View className="w-full flex-row justify-between items-center">
 					<Text className="">Alternativa Ikoner</Text>
 					<Switch
@@ -81,7 +131,7 @@ export default function SettingsScreen({ navigation }) {
 						kommer ändras <Text className="font-bold">inte appens namn</Text>
 					</Text>
 				</View>
-				<View className="flex-row flex-wrap justify-around items-center gap-5 h-3/5 mt-1">
+				<View className="flex-row flex-wrap justify-around items-center gap-5 h-2/6 mt-1">
 					{iconImages.map((icon, index) => {
 						return (
 							<Pressable
@@ -89,14 +139,12 @@ export default function SettingsScreen({ navigation }) {
 								style={{
 									borderColor: selectedIcon === index ? "red" : "transparent",
 								}}
-								onPress={() => changeSelectIcon(index)}
+								onPress={() => setSelectedIcon(index)}
 								// biome-ignore lint/suspicious/noArrayIndexKey: <I dont like this error very much >:( )>
 								key={index}
 							>
 								<Image
-									source={{
-										uri: icon,
-									}}
+									source={{ uri: icon }}
 									className="w-20 h-20 rounded-xl"
 								/>
 							</Pressable>
