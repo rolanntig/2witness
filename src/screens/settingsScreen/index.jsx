@@ -46,9 +46,9 @@ export default function SettingsScreen({ navigation }) {
 				return null;
 			}
 		};
-		if(getData() === null) {
+		if (getData() === null) {
 			console.error("Error getting data");
-		};
+		}
 	}, []);
 
 	React.useEffect(() => {
@@ -70,10 +70,18 @@ export default function SettingsScreen({ navigation }) {
 				return null;
 			}
 		};
-		if(storeData(jsonData) === null) {
+		if (storeData(jsonData) === null) {
 			console.error("Error storing data");
-		};
-	}, [selectedIcon, notifications, setting2, setting3, setting4, setting5, setting6]);
+		}
+	}, [
+		selectedIcon,
+		notifications,
+		setting2,
+		setting3,
+		setting4,
+		setting5,
+		setting6,
+	]);
 
 	/* Tailwind works for phone but not web... */
 	return (
@@ -102,19 +110,17 @@ export default function SettingsScreen({ navigation }) {
 				</View>
 			</View>
 			<View className="w-11/12 bg-gray-400 rounded-lg px-5">
-				<View className="w-full flex-row justify-between items-center ">
-					<Text className="">Inställing</Text>
-					<Switch
-						onValueChange={() => setSetting4((prevState) => !prevState)}
-						value={setting4}
-					/>
+				<View className="w-full flex-row justify-between items-start py-3">
+					<Text className="">Städer</Text>
+					<Text className="text-black">0st Favoriter</Text>
 				</View>
-				<View className="w-full flex-row justify-between items-center ">
-					<Text className="">Inställing</Text>
-					<Switch
-						onValueChange={() => setSetting5((prevState) => !prevState)}
-						value={setting5}
-					/>
+				<View className="w-full flex-row justify-between items-center py-1 pb-4">
+					<Pressable
+						className="w-full flex-row justify-center bg-gray-300 rounded-lg px-2 py-2"
+						onPress={() => navigation.navigate("CitySelector")}
+					>
+						<Text className="text-black">Välj Städer</Text>
+					</Pressable>
 				</View>
 			</View>
 			<View className="w-11/12 bg-gray-400 rounded-lg mb-6 px-5">
