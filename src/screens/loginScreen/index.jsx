@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Alert } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'postgres://postgres.dilhnddpgnwywgmrlhey:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnaW96Z3V6ZnV3Y2htcGdpdnhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTAzMjA0NjIsImV4cCI6MjAyNTg5NjQ2Mn0._9_KOdLMK9I_XTFf1B3DphacS3UMxF-eM-4b6sTwY1M';
+const supabaseUrl = 'https://dilhnddpgnwywgmrlhey.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpbGhuZGRwZ253eXdnbXJsaGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MTAxMzQsImV4cCI6MjAyNTM4NjEzNH0.BK5Kyk00MUwCGCdXaAytr4cGrNOj5gSngQeL_rMcoBg';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function App() {
@@ -11,33 +11,42 @@ export default function App() {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    const { user, session, error } = await supabase.auth.signIn({
-      email,
-      password,
-    });
+    try {
+      const { user, session, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-    if (error) console.log('Inloggningsfel:', error);
-    else console.log('Användare inloggad:', user, 'Session:', session);
+      if (error) {
+        Alert.alert('Login Error', error.message);
+      } else {
+        Alert.alert('Success', 'Logged in successfully!');
+        // Do something with user/session if needed
+      }
+    } catch (error) {
+      console.error('Login Error:', error.message);
+      Alert.alert('Login Error', 'An error occurred while logging in.');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Välkommen!</Text>
+      <Text style={styles.title}>Welcome!</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
         value={email}
-        placeholder="E-post"
+        placeholder="Email"
         keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
         onChangeText={setPassword}
         value={password}
-        placeholder="Lösenord"
+        placeholder="Password"
         secureTextEntry
       />
-      <Button title="Logga in" onPress={handleLogin} />
+      <Button title="Log in" onPress={handleLogin} />
     </View>
   );
 }
