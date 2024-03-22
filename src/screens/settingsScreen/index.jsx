@@ -20,7 +20,7 @@ export default function SettingsScreen({ navigation }) {
 	const [alternativeIcons, setAlternativeIcons] = useState(false);
 	const [selectedIcon, setSelectedIcon] = useState("");
 
-	const storageKey = "@storage_Key";
+	const storageKey = "settingsSaveKey";
 	React.useEffect(() => {
 		//* Get the stored value
 		const getData = async () => {

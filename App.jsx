@@ -102,7 +102,20 @@ function HomeStack() {
 				component={MyTabs}
 				options={{ headerShown: false }}
 			/>
-			<Stack.Screen name="CitySelector" component={CitySelector} />
+			<Stack.Screen
+				title="Select Favorites"
+				name="CitySelector"
+				component={CitySelector}
+				options={{
+					headerStyle: {
+						backgroundColor: "rgb(55 65 81)",
+					},
+					headerTintColor: "#fff",
+					headerTitleStyle: {
+						fontWeight: "bold",
+					},
+				}}
+			/>
 		</Stack.Navigator>
 	);
 }
