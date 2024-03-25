@@ -19,6 +19,7 @@ export default function SettingsScreen({ navigation }) {
 	const [setting3, setSetting3] = useState(false);
 	const [alternativeIcons, setAlternativeIcons] = useState(false);
 	const [selectedIcon, setSelectedIcon] = useState("");
+	const [favoriteCities, setFavoriteCities] = useState([]);
 
 	const storageKey = "settingsSaveKey";
 	React.useEffect(() => {
@@ -36,6 +37,13 @@ export default function SettingsScreen({ navigation }) {
 					setAlternativeIcons(parsedValue.setting4);
 				} else {
 					setSelectedIcon(0);
+				}
+
+				//! This only runs once, going to change this to a better solution later
+				//TODO: Change this to a better solution that updates on page enter
+				const favoriteCities = await AsyncStorage.getItem("favoriteCities");
+				if (favoriteCities !== null) {
+					setFavoriteCities(JSON.parse(favoriteCities).favoriteCities);
 				}
 			} catch (e) {
 				//* error reading value
@@ -98,7 +106,9 @@ export default function SettingsScreen({ navigation }) {
 			<View className="w-11/12 bg-gray-400 rounded-lg px-5">
 				<View className="w-full flex-row justify-between items-start py-3">
 					<Text className="">Städer</Text>
-					<Text className="text-black">0st Favoriter</Text>
+					<Text className="text-black">
+						{favoriteCities ? favoriteCities.length : "0"}st favoriter
+					</Text>
 				</View>
 				<View className="w-full flex-row justify-between items-center py-1 pb-4">
 					<Pressable

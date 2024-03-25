@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import { View, Text, Switch, Image, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable, TextInput } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -17,7 +17,7 @@ export default function CitySelector({ navigation }) {
 
 	const storageKey = "favoriteCities";
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <I dont want this to refresh, only want to run it once>
 	React.useEffect(() => {
 		//! Clear storage for testing purposes
 		/* AsyncStorage.clear(); */
@@ -39,7 +39,6 @@ export default function CitySelector({ navigation }) {
 		setLän(tempLänArray);
 		setLänAndKommun([...tempLänArray, ...tempKommunArray]);
 
-		console.log(favoriteCities);
 		const getData = async () => {
 			try {
 				const value = await AsyncStorage.getItem(storageKey);
@@ -93,7 +92,6 @@ export default function CitySelector({ navigation }) {
 			const unfolded = await favoriteCities.filter((city) => {
 				return city !== item.key[0];
 			});
-			console.log("Removing: ");
 			const updatedCities = unfolded.flat(Number.POSITIVE_INFINITY);
 			const jsonData = JSON.stringify({ favoriteCities: updatedCities });
 			setFavoriteCities(updatedCities);
@@ -103,51 +101,105 @@ export default function CitySelector({ navigation }) {
 		}
 	};
 
+	const CityButton = ({ item }) => {
+		return (
+			<View>
+				{favoriteCities?.includes(`${item.key}`) ? (
+					<Pressable
+						className="bg-slate-300 rounded p-2 mb-1 w-full"
+						onPress={() => removeData(item)}
+					>
+						<View className="flex-row justify-between mx-1">
+							<Text className="">{item.key}</Text>
+							{favoriteCities?.includes(`${item.key}`) ? (
+								<Text className="text-white">✅</Text>
+							) : null}
+						</View>
+					</Pressable>
+				) : (
+					<Pressable
+						className="bg-slate-300 rounded p-2 mb-1 w-full"
+						onPress={() => storeData(item)}
+					>
+						<View className="flex-row justify-between mx-1">
+							<Text className="">{item.key}</Text>
+							{favoriteCities?.includes(`${item.key}`) ? <Text>✔️</Text> : null}
+						</View>
+					</Pressable>
+				)}
+			</View>
+		);
+	};
+
 	return (
-		<View className="h-full flex items-center justify-around bg-gray-700">
+		<View className="h-screen flex items-center bg-gray-700">
 			{favoriteCities ? (
 				<View className="h-2/6 flex-col justify-around">
-					<Text className="text-white bg-slate-500 mt-5 mx-4 px-4 py-2 underline text-xl rounded font-bold tracking-wider">
-						Favoritstäder:
-					</Text>
+					<View className="bg-gray-400 mt-5 mx-4 px-4 py-2 rounded">
+						<Text className="bg-slate-300 p-1 rounded pl-3 underline text-xl font-bold tracking-wider">
+							Favoritstäder:
+						</Text>
+					</View>
 					<View
-						className={`w-11/12 bg-gray-600 rounded-lg h-4/6 flex-row flex-wrap ${
-							favoriteCities.length > 5 ? "h-fit" : "h-fit"
-						}`}
+						className={
+							"w-11/12 bg-gray-400 rounded-lg h-4/6 flex-row flex-wrap"
+						}
 					>
 						{favoriteCities.length === 0 ? (
+							<Text className="bg-slate-300 px-8 mx-4 p-1 my-3 w-10/12 text-center text-xl rounded">
+								Inga favoriter
+							</Text>
+						) : (
 							favoriteCities.map((city, index) => {
 								if (index < 5) {
 									return (
-										<Text
-											className="text-white bg-slate-500 mx-2 p-1 px-2 my-3 w-5/12 rounded"
-											// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+										<Pressable
+											// biome-ignore lint/suspicious/noArrayIndexKey: <I want to use index as a key because its easy>
 											key={index}
+											onPress={() => removeData({ key: [city] })}
+											className={`bg-slate-300 mx-2 p-1 my-3 ${
+												favoriteCities.length === 1
+													? "w-10/12 px-8 mx-4"
+													: "w-5/12 px-2"
+											} rounded`}
 										>
-											{city}
-										</Text>
+											<Text
+												// biome-ignore lint/suspicious/noArrayIndexKey: <I want to use index as a key because its easy>
+												key={index}
+											>
+												{city}
+											</Text>
+										</Pressable>
 									);
 								}
-								if (index === 6) {
+								if (index === 5) {
 									return (
-										<Text className="text-white bg-slate-500 mx-2 p-1 px-2 my-3 w-5/12 rounded">
-											{`+${favoriteCities.length - 5}`}
-										</Text>
+										<Pressable
+											key={"6thPos"}
+											onPress={() => {
+												if (favoriteCities.length <= 6) {
+													removeData({ key: [favoriteCities[5]] });
+												}
+											}}
+											className="bg-slate-300 mx-2 p-1 px-2 my-3 w-5/12 rounded"
+										>
+											<Text>
+												{favoriteCities.length > 6
+													? `+${favoriteCities.length - 5}`
+													: favoriteCities[5]}
+											</Text>
+										</Pressable>
 									);
 								}
 								return null;
 							})
-						) : (
-							<Text className="text-white bg-slate-500 mx-2 p-1 px-2 my-3 w-5/12 rounded">
-								Inga favoriter
-							</Text>
 						)}
 					</View>
 				</View>
 			) : null}
 			<TextInput
 				placeholder="Sök på stad eller län"
-				className="w-7/12 bg-gray-400 rounded-lg px-5 m-3"
+				className="w-7/12 bg-gray-300 rounded-lg px-5 m-5 mt-10"
 				onChangeText={(text) => setSearch(text)}
 				onFocus={() => {
 					if (search === "") {
@@ -162,45 +214,15 @@ export default function CitySelector({ navigation }) {
 				value={search}
 				keyboardType="default"
 			/>
-			{/* //* The list currently only loads when the search is empty for some reason, will fix later on */}
 			{länAndKommun ? (
 				<FlatList
-					className="w-6/12"
+					className="w-6/12 flex-grow-0 h-2/5"
 					data={länAndKommun.map((item, index) => {
 						return { key: item, id: index };
 					})}
-					renderItem={({ item }) => (
-						<View>
-							{favoriteCities?.includes(`${item.key}`) ? (
-								<Pressable
-									className="bg-slate-600 rounded p-2 mb-1 w-full"
-									onPress={() => removeData(item)}
-								>
-									<View className="flex-row justify-between mx-1">
-										<Text className="text-white">{item.key}</Text>
-										{favoriteCities?.includes(`${item.key}`) ? (
-											<Text>✔️</Text>
-										) : null}
-									</View>
-								</Pressable>
-							) : (
-								<Pressable
-									className="bg-slate-600 rounded p-2 mb-1 w-full"
-									onPress={() => storeData(item)}
-								>
-									<View className="flex-row justify-between mx-1">
-										<Text className="text-white">{item.key}</Text>
-										{favoriteCities?.includes(`${item.key}`) ? (
-											<Text>✔️</Text>
-										) : null}
-									</View>
-								</Pressable>
-							)}
-						</View>
-					)}
+					renderItem={({ item }) => <CityButton item={item} />}
 				/>
 			) : null}
-
 			<StatusBar style="auto" />
 		</View>
 	);
