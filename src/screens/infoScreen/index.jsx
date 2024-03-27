@@ -11,14 +11,11 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import InfoModal from "./components/InfoModal";
-
 
 const InfoScreen = () => {
 	// Tillstånd för den önskade informationen som ska visas
 	const [wantedInfo, setWantedInfo] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	
 
 	// Använd useEffect för att hämta data när komponenten monteras
 	useEffect(() => {
@@ -27,7 +24,7 @@ const InfoScreen = () => {
 			try {
 				// Hämta data från JSONPlaceholder API
 				const response = await fetch(
-					"https://jsonplaceholder.typicode.com/todos",
+					"https://jsonplaceholder.typicode.com/posts",
 				);
 				// Konvertera svaret till JSON-format
 				const data = await response.json();
@@ -183,7 +180,6 @@ const InfoScreen = () => {
 							/>
 						</View>
 					</Modal>
-					<InfoModal/>
 					<Text className="text-2xl my-2 font-bold">Eftersökt Information</Text>
 				</View>
 

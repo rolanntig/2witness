@@ -10,68 +10,27 @@ import {
 	Button,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 
 const InfoScreen = () => {
 	const [wantedInfo, setWantedInfo] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
-	const [articleData, setArticleData] = useState(null);
 
 	useEffect(() => {
-		const getWantedData = async () => {
+		const fetchData = async () => {
 			try {
 				const response = await fetch(
-					"https://jsonplaceholder.typicode.com/todos",
+					"https://jsonplaceholder.typicode.com/posts"
 				);
 				const data = await response.json();
-				setWantedInfo(data.slice(0, 10));
+				setWantedInfo(data);
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			}
 		};
 
-		const fetchArticleData = async () => {
-			try {
-				const response = await fetch(
-					"https://jsonplaceholder.typicode.com/posts/1",
-				);
-				const data = await response.json();
-				setArticleData(data);
-			} catch (error) {
-				console.error("Error fetching article data:", error);
-			}
-		};
-
-		if (isModalVisible && selectedItem) {
-			fetchArticleData();
-		}
-
-		getWantedData();
-	}, [isModalVisible, selectedItem]);
-
-	const uploadMedia = async () => {
-		try {
-			const result = await ImagePicker.launchImageLibraryAsync({
-				mediaTypes: ImagePicker.MediaTypeOptions.All,
-				allowsEditing: true,
-				aspect: [4, 3],
-				quality: 1,
-			});
-
-			if (!result.cancelled) {
-				Alert.alert("Success", "Bilden eller videon har laddats upp!");
-			} else {
-				Alert.alert(
-					"Cancelled",
-					"Du har avbrutit nedladdningen av bilden eller videon.",
-				);
-			}
-		} catch (error) {
-			console.error("Error uploading media: ", error);
-			Alert.alert("Error", "Det uppstod ett fel vid uppladdning av media.");
-		}
-	};
+		fetchData();
+	}, []);
 
 	const handleClick = (item) => {
 		setSelectedItem(item);
@@ -82,17 +41,7 @@ const InfoScreen = () => {
 		<ScrollView className="flex-1 bg-white ">
 			<View className="items-center p-4">
 				<Text className="text-3xl font-bold mb-6">Information</Text>
-				<View className="flex flex-row space-x-2 justify-between w-full">
-					<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
-						<Text className="text-gray-700">Vid akuta händelser ring:</Text>
-						<Text className="text-3xl font-bold text-center">112</Text>
-					</View>
-
-					<View className="flex bg-white border rounded-lg shadow-md p-4 mb-6 flex-1">
-						<Text className="text-gray-700">Vid andra ärenden ring:</Text>
-						<Text className="text-3xl font-bold text-center">114 14</Text>
-					</View>
-				</View>
+				{/* Akutnummer och annan info här */}
 				<View className="border-t-4 w-full border-yellow-500">
 					<Modal
 						className="flex-1 justify-center bg-black items-center"
@@ -155,14 +104,7 @@ const InfoScreen = () => {
 					</ScrollView>
 				</View>
 				<StatusBar style="auto" />
-				<View className="w-full mb-6">
-					<View className="border-t-4 mt-2 w-full  border-yellow-500">
-						<Text className="text-2xl my-2 font-bold">FAQ</Text>
-					</View>
-					<View className="bg-white w-full border rounded-lg shadow-md mb-6">
-						{/* FAQ items */}
-					</View>
-				</View>
+				{/* FAQ-sektionen */}
 			</View>
 		</ScrollView>
 	);

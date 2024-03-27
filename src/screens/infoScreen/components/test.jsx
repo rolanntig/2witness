@@ -11,22 +11,21 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-// import InfoModal from "./components/InfoModal";
 
 const InfoScreen = () => {
 	// Tillstånd för den önskade informationen som ska visas
 	const [wantedInfo, setWantedInfo] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [articleData, setArticleData] = useState(null);
+	const [selectedItem, setSelectedItem] = useState(null);
 
 	// Använd useEffect för att hämta data när komponenten monteras
 	useEffect(() => {
 		// Funktion för att hämta data från en API
-		const getwantedData = async () => {
+		const fetchData = async () => {
 			try {
 				// Hämta data från JSONPlaceholder API
 				const response = await fetch(
-					"https://jsonplaceholder.typicode.com/todos",
+					"https://jsonplaceholder.typicode.com/posts",
 				);
 				// Konvertera svaret till JSON-format
 				const data = await response.json();
@@ -39,25 +38,14 @@ const InfoScreen = () => {
 			}
 		};
 
-		const fetchArticleData = async () => {
-			try {
-				const response = await fetch(
-					"https://jsonplaceholder.typicode.com/posts/1",
-				); // Exempel API för teständamål
-				const data = await response.json();
-				setArticleData(data);
-			} catch (error) {
-				console.error("Error fetching article data:", error);
-			}
-		};
-
-		if (isModalVisible) {
-			fetchArticleData();
-		}
-
 		// Anropa funktionen fetchData för att hämta data
-		getwantedData();
-	}, [isModalVisible]);
+		fetchData();
+	}, []);
+
+	const handleClick = (item) => {
+		setSelectedItem(item);
+		setIsModalVisible(true);
+	};
 
 	// Funktion för att ladda upp media (bild eller video)
 	const uploadMedia = async () => {
@@ -124,15 +112,21 @@ const InfoScreen = () => {
 							>
 								<AntDesign name="close" size={24} color="grey" />
 							</TouchableOpacity>
+
 							<View className="px-4 h-2/3">
-								{articleData && (
+								{selectedItem && (
 									<>
 										<Text className="px-2 text-xl mb-1 font-bold text-gray-800 md:text-xl dark:text-gray-400">
-											{articleData.title}
+											{selectedItem.title}
 										</Text>
-										<Text className="px-2 mb-3 text-sl font-bold text-gray-600 md:text-xl dark:text-gray-400">
-											{articleData.body}
+										<Text className="px-2 mb-1 text-sm font-bold text-gray-600 md:text-base dark:text-gray-400">
+											Published: {selectedItem.date || "Unknown"}
 										</Text>
+										<ScrollView className="px-2">
+											<Text className="text-justify mb-3 text-gray-600 dark:text-gray-400">
+												{selectedItem.body}
+											</Text>
+										</ScrollView>
 									</>
 								)}
 							</View>
@@ -158,7 +152,7 @@ const InfoScreen = () => {
 								className="flex border-b flex-row p-2 justify-between"
 							>
 								<Text className="flex-1 tracking-wide">{item.title}</Text>
-								<TouchableOpacity onPress={() => setIsModalVisible(true)}>
+								<TouchableOpacity onPress={() => handleClick(item)}>
 									<AntDesign name="infocirlceo" size={26} color="black" />
 								</TouchableOpacity>
 							</View>
