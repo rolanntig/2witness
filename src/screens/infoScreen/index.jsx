@@ -8,17 +8,20 @@ import {
 	ScrollView,
 	Modal,
 	Button,
+	Pressable,
+	Linking,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import InfoModal from "./components/InfoModal";
 
-
 const InfoScreen = () => {
 	// Tillstånd för den önskade informationen som ska visas
 	const [wantedInfo, setWantedInfo] = useState([]);
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	
+
+	const [whatFAQNumber, setWhatFAQNumber] = useState(0);
+	const [isFAQModalVisible, setIsFAQModalVisible] = useState(false);
 
 	// Använd useEffect för att hämta data när komponenten monteras
 	useEffect(() => {
@@ -183,7 +186,7 @@ const InfoScreen = () => {
 							/>
 						</View>
 					</Modal>
-					<InfoModal/>
+					<InfoModal />
 					<Text className="text-2xl my-2 font-bold">Eftersökt Information</Text>
 				</View>
 
@@ -208,7 +211,56 @@ const InfoScreen = () => {
 				</View>
 				<StatusBar style="auto" />
 				<View className="w-full mb-6">
-					<View className="border-t-4 mt-2 w-full  border-yellow-500">
+					<View className="border-t-4 mt-2 w-full border-yellow-500">
+						<Modal
+							visible={isFAQModalVisible}
+							onRequestClose={() => setIsFAQModalVisible(!isFAQModalVisible)}
+							animationType="fade"
+							transparent={true}
+						>
+							<View className="h-screen mb-10 bg-black/20">
+								<Pressable
+									className="flex-1 justify-center items-center h-4/6 w-screen"
+									onPress={() => setIsFAQModalVisible(!isFAQModalVisible)}
+								/>
+								<View className="px-4 py-5 h-1/4 bg-slate-100 w-11/12 ml-4 rounded-xl">
+									<Text className="px-2 text-xl mb-1 font-bold text-gray-800 md:text-xl dark:text-gray-400">
+										{whatFAQNumber === 0 ? "Vad händer med materialet?" : null}
+										{whatFAQNumber === 1
+											? "Hur vet jag att jag är anonym?"
+											: null}
+										{whatFAQNumber === 2
+											? "Vad sparas när jag tar en bild?"
+											: null}
+										{whatFAQNumber === 3 ? "Vad innebär kryptering?" : null}
+										{whatFAQNumber === 4 ? "Vad är syftet med appen?" : null}
+									</Text>
+									<View>
+										<Text className="text-justify mb-3 text-gray-800 text dark:text-gray-400">
+											{whatFAQNumber === 0
+												? "Det krypteras och skickas till 2witness helt anonymt, därefter lagras det i vår databas som anslutna polis och åklagarmyndigheter kan komma åt. Materialet används sedan som bevismaterial om det paras ihop med ett fall."
+												: null}
+											{whatFAQNumber === 1
+												? "Inget av din data från appen sparas på din telefon. All data krypteras innan det skickas till 2witness och inget av detta kan ses av polis/åklagare"
+												: null}
+											{whatFAQNumber === 2
+												? "All information kring bilden som vanligen sparas i bildens meta-data. Detta inkluderar saker som tiden, platsen och storleken i pixlar som orginalbilden innehåller med mera. Detta krävs för att materialet skall kunnas användas som bevismaterial."
+												: null}
+											{whatFAQNumber === 3
+												? "Kryptering är en säkerhetsprocess där information omvandlas till kod genom att använda algoritmer och nycklar, vilket gör det svårt för obehöriga att förstå utan rätt dekrypteringsnyckel. Kryptering används brett för att skydda känslig information."
+												: null}
+											{whatFAQNumber === 4
+												? "Målet med 2witness är att göra det möjligt för allmänheten att vittna anonymt, antingen direkt med inspelning på plats eller genom uppladdningen i efterhand."
+												: null}
+										</Text>
+									</View>
+								</View>
+								<Pressable
+									className="mb-20 mt-5"
+									onPress={() => setIsFAQModalVisible(!isFAQModalVisible)}
+								/>
+							</View>
+						</Modal>
 						<Text className="text-2xl my-2 font-bold">FAQ</Text>
 					</View>
 					<View className="bg-white w-full border rounded-lg shadow-md mb-6">
@@ -216,7 +268,12 @@ const InfoScreen = () => {
 							<Text className="flex-1 tracking-wide">
 								Vad händer med materialet?
 							</Text>
-							<TouchableOpacity onPress={() => setIsModalVisible(true)}>
+							<TouchableOpacity
+								onPress={() => {
+									setIsFAQModalVisible(true);
+									setWhatFAQNumber(0);
+								}}
+							>
 								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
@@ -224,7 +281,12 @@ const InfoScreen = () => {
 							<Text className="flex-1 tracking-wide">
 								Hur vet jag att jag är anonym?
 							</Text>
-							<TouchableOpacity onPress="">
+							<TouchableOpacity
+								onPress={() => {
+									setIsFAQModalVisible(true);
+									setWhatFAQNumber(1);
+								}}
+							>
 								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
@@ -232,7 +294,12 @@ const InfoScreen = () => {
 							<Text className="flex-1 tracking-wide">
 								Vad sparas när jag tar en bild?
 							</Text>
-							<TouchableOpacity onPress="">
+							<TouchableOpacity
+								onPress={() => {
+									setIsFAQModalVisible(true);
+									setWhatFAQNumber(2);
+								}}
+							>
 								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
@@ -240,7 +307,12 @@ const InfoScreen = () => {
 							<Text className="flex-1 tracking-wide">
 								Vad innebär kryptering?
 							</Text>
-							<TouchableOpacity onPress="">
+							<TouchableOpacity
+								onPress={() => {
+									setIsFAQModalVisible(true);
+									setWhatFAQNumber(3);
+								}}
+							>
 								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
@@ -248,12 +320,20 @@ const InfoScreen = () => {
 							<Text className="flex-1 tracking-wide">
 								Vad är syftet med appen?
 							</Text>
-							<TouchableOpacity onPress="">
+							<TouchableOpacity
+								onPress={() => {
+									setIsFAQModalVisible(true);
+									setWhatFAQNumber(4);
+								}}
+							>
 								<AntDesign name="pluscircleo" size={24} color="black" />
 							</TouchableOpacity>
 						</View>
 						<View className="flex flex-row p-2 justify-between">
-							<Text className="flex-1 text-center tracking-wide">
+							<Text
+								className="flex-1 text-center tracking-wide text-sky-700"
+								onPress={() => Linking.openURL("https://www.2witness.se/")}
+							>
 								Läs mer på: 2witness.se
 							</Text>
 						</View>
