@@ -2,9 +2,13 @@ import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, Switch, Image, Pressable } from "react-native";
 import { useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen({ navigation }) {
+	// Checks if the current page is in focus for useEffect to run
+	const isFocused = useIsFocused();
+
 	// The images for the icons
 	const iconImages = [
 		"https://i.pinimg.com/736x/e6/e9/3f/e6e93f7bd4f95000d9f56a3c096047d0.jpg",
@@ -22,8 +26,22 @@ export default function SettingsScreen({ navigation }) {
 	const [favoriteCities, setFavoriteCities] = useState([]);
 
 	const storageKey = "settingsSaveKey";
+
+	//* This useEffect runs when the page is in focus and gets the favorite cities from storage
 	React.useEffect(() => {
-		//* Get the stored value
+		const getFavoriteCities = async () => {
+			const favoriteCities = await AsyncStorage.getItem("favoriteCities");
+			if (favoriteCities !== null) {
+				setFavoriteCities(JSON.parse(favoriteCities).favoriteCities);
+			}
+		};
+		if (isFocused) {
+			getFavoriteCities();
+		}
+	}, [isFocused]);
+
+	//* This useEffect gets the settings from storage 
+	React.useEffect(() => {
 		const getData = async () => {
 			try {
 				const value = await AsyncStorage.getItem(storageKey);
@@ -38,13 +56,6 @@ export default function SettingsScreen({ navigation }) {
 				} else {
 					setSelectedIcon(0);
 				}
-
-				//! This only runs once, going to change this to a better solution later
-				//TODO: Change this to a better solution that updates on page enter
-				const favoriteCities = await AsyncStorage.getItem("favoriteCities");
-				if (favoriteCities !== null) {
-					setFavoriteCities(JSON.parse(favoriteCities).favoriteCities);
-				}
 			} catch (e) {
 				//* error reading value
 				return null;
@@ -55,6 +66,7 @@ export default function SettingsScreen({ navigation }) {
 		}
 	}, []);
 
+	//* This useEffect saves the settings to storage when they change
 	React.useEffect(() => {
 		//* Update the stored values when they change
 		const jsonData = JSON.stringify({
@@ -80,7 +92,19 @@ export default function SettingsScreen({ navigation }) {
 	/* Tailwind works for phone but not web... */
 	return (
 		<View className="h-full flex items-center justify-around bg-gray-700">
-			<View className="w-11/12 bg-gray-400 rounded-lg px-5 mt-8">
+			<Pressable
+				className="w-11/12 bg-gray-400 rounded-lg mt-8 flex-row justify-between p-3"
+				onPress={() => navigation.navigate("Profile")}
+			>
+				<Text className="text-xl">Förnamn Efternamn</Text>
+				<Image
+					className="w-10 h-10 rounded-full"
+					source={{
+						uri: "https://static-00.iconduck.com/assets.00/profile-circle-icon-512x512-zxne30hp.png",
+					}}
+				/>
+			</Pressable>
+			<View className="w-11/12 bg-gray-400 rounded-lg px-5 mt-2">
 				<View className="w-full flex-row justify-between items-center">
 					<Text className="">Notifikationer</Text>
 					<Switch
@@ -103,7 +127,7 @@ export default function SettingsScreen({ navigation }) {
 					/>
 				</View>
 			</View>
-			<View className="w-11/12 bg-gray-400 rounded-lg px-5">
+			<View className="w-11/12 bg-gray-400 rounded-lg px-5 m-2">
 				<View className="w-full flex-row justify-between items-start py-3">
 					<Text className="">Städer</Text>
 					<Text className="text-black">
